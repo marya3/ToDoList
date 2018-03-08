@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
 
 /**
  *
  * @author tmp-sda-1161
  */
+package model;
+
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 import View.TaskDTO;
 import dbhandler.FileHandler;
 public class TaskRepository {
@@ -31,12 +32,25 @@ public class TaskRepository {
     }
     public void showTaskList()
     {
+        System.out.print("Project");
+        System.out.print("         ");
+        System.out.print("Title");
+        System.out.print("         ");
+        System.out.print("Due Date");
+        System.out.print("         ");
+        System.out.print("Status");
+        System.out.print("         ");
+        System.out.println("Alert");
         for(Task t:taskList)
         {
-            System.out.println(t.getProject());
-            System.out.println(t.getTitle());
-            System.out.println(t.getDueDate());
-            System.out.println(t.getStatus());
+            System.out.print(t.getProject());
+            System.out.print("         ");
+            System.out.print(t.getTitle());
+            System.out.print("         ");
+            System.out.print(t.getDueDate());
+            System.out.print("         ");
+            System.out.print(t.getStatus());
+            System.out.print("         ");
             System.out.println(t.getAlert());
         }
     }
@@ -61,12 +75,8 @@ public class TaskRepository {
     }
     public void writeToFile()
     {
-        for (Task t: taskList)
-        {
             System.out.print("inwritetofile");
-            fh.writeFile(t);
-            
-        }
+            fh.writeFile(taskList);
         
     }
             

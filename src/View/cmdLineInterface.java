@@ -39,7 +39,7 @@ public class cmdLineInterface {
         case 1: pc.processCommand(option,null);;break;
         case 2: System.out.println("user selected 2");showAddTaskMenu();break;
         case 3: System.out.println("user selected 3");break;
-        //case 4: saveQuit();break;
+        case 4: saveQuit();break;
         case 5: System.out.println("user selected 5");break;
         case 6: System.out.println("user selected 6");break;
         case 7: System.out.println("user selected 7");break;
