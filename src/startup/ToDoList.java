@@ -10,7 +10,6 @@ package startup;
  * @author tmp-sda-1161
  */
 import View.*;
-import java.util.Scanner;
 public class ToDoList {
 
     /**
@@ -18,9 +17,6 @@ public class ToDoList {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Scanner scanner = new Scanner(System.in);
-        
-         
         cmdLineInterface cmdlI = new cmdLineInterface();
         cmdlI.showMainMenu();
         int choice = cmdlI.getUserInput();

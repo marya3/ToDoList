@@ -36,14 +36,17 @@ public class cmdLineInterface {
         
         switch (option)
         {
-        case 1: pc.processCommand(option,null);;break;
+        case 1: showReportHeading();
+                showReport();break;
+                //pc.processCommand(option,null);;break;
         case 2: System.out.println("user selected 2");showAddTaskMenu();break;
-        case 3: System.out.println("user selected 3");break;
-        case 4: saveQuit();break;
+        case 3: edit();break;
+        case 4: pc.processCommand(4, null);break;
         case 5: System.out.println("user selected 5");break;
         case 6: System.out.println("user selected 6");break;
         case 7: System.out.println("user selected 7");break;
         }
+        
         return option;
     }
     public void showAddTaskMenu()
@@ -65,8 +68,64 @@ public class cmdLineInterface {
         pc.processCommand(option,tdto);
     }
             
-    public void saveQuit()
+    public void edit()
     {
-        pc.processCommand(4, null);
+        showReportHeading();
+        showReport();
+        System.out.print("Enter the number of task you want to edit: ");
+        String userinput = scanner.next();
+        int taskNo = Integer.parseInt(userinput);
+        System.out.println("1 To change Project");
+        System.out.println("2 To change Title");
+        System.out.println("3 To change Duedate");
+        System.out.print("Enter you choice: ");
+        String whatToChange = scanner.next();
+        int editOption = Integer.parseInt(whatToChange);
+        
+        switch (editOption)
+        {
+            case 1: System.out.print("Enter project :");
+                    String pr = scanner.next();
+                    pc.edit(taskNo, editOption,pr);break;
+            case 2: System.out.print("Enter title :");
+                    String tt = scanner.next();
+                    pc.edit(taskNo, editOption,tt);break; 
+            case 3: System.out.print("Enter DueDate :");
+                    String date = scanner.next();
+                    pc.edit(taskNo, editOption,date);break;
+            case 4: System.out.print("Enter status :");
+                    String status = scanner.next();
+                    pc.edit(taskNo, editOption,status);break;
+        }        
+    }
+    public void showReportHeading()
+    {
+        System.out.print("Project");
+        System.out.print("         ");
+        System.out.print("Title");
+        System.out.print("         ");
+        System.out.print("Due Date");
+        System.out.print("         ");
+        System.out.print("Status");
+        System.out.print("         ");
+        System.out.println("Alert");
+    }
+            
+    public void showReport()
+    {
+        TaskDTO tdto = pc.showTL();
+        while (tdto != null)
+        {
+            System.out.print(tdto.getProjectDTO());
+            System.out.print("         ");
+            System.out.print(tdto.getTitleDTO());
+            System.out.print("         ");
+            System.out.print(tdto.getDueDateDTO());
+            System.out.print("         ");
+            System.out.print(tdto.getStatusDTO());
+            System.out.print("         ");
+            System.out.println(tdto.getAlertDTO());
+            tdto = pc.showTL();
+        }
     }
 }

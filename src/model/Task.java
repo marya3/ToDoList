@@ -25,12 +25,12 @@ public class Task implements Serializable
   
   public Task(TaskDTO tdto)
   {
-      project = tdto.project;
-      title    = tdto.title;
-      duedate = tdto.date1;
-      completiondate = tdto.date2;
-      status = tdto.status;
-      alert = tdto.alert;
+      project = tdto.getProjectDTO();
+      title    = tdto.getTitleDTO();
+      duedate = tdto.getDueDateDTO();
+      completiondate = tdto.getCompletionDateDTO();
+      status = tdto.getStatusDTO();
+      alert = tdto.getAlertDTO();
   }
   public String getProject()
   {
@@ -56,5 +56,27 @@ public class Task implements Serializable
   {
       return completiondate.toString();
   }
+  public void setProject(String project)
+  {
+      this.project = project;
+  }
+  public void setTitle(String title)
+  {
+      this.title = title;
+  }
+  public void setStatus(String status)
+  {
+      this.status = status;
+  }
+  
+  public void setDueDate(String dueDate)
+  {
+      this.duedate = dueDate;
+  }
+  public void setCompletionDate(String completionDate)
+  {
+      this.completiondate=completionDate;
+  }
+
 }
 

@@ -11,18 +11,21 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 //import java.util.Date;
 import View.TaskDTO;
 import dbhandler.FileHandler;
 public class TaskRepository {
     FileHandler fh;    
     ArrayList<Task> taskList;
+    ListIterator<Task> taskIT;
     //Task task = new Task(String title, Date date1,Date date2,
     //      String status,String alert);
     public TaskRepository()
     {
         fh = new FileHandler();
         taskList = new ArrayList<>();
+    
     }
     public void addTask(TaskDTO tdto)
     {
@@ -30,31 +33,43 @@ public class TaskRepository {
         taskList.add(task);
         
     }
-    public void showTaskList()
+    public TaskDTO showNextTask()
     {
-        System.out.print("Project");
-        System.out.print("         ");
-        System.out.print("Title");
-        System.out.print("         ");
-        System.out.print("Due Date");
-        System.out.print("         ");
-        System.out.print("Status");
-        System.out.print("         ");
-        System.out.println("Alert");
-        for(Task t:taskList)
+        Task tk;
+        if (taskIT.hasNext())
         {
-            System.out.print(t.getProject());
-            System.out.print("         ");
-            System.out.print(t.getTitle());
-            System.out.print("         ");
-            System.out.print(t.getDueDate());
-            System.out.print("         ");
-            System.out.print(t.getStatus());
-            System.out.print("         ");
-            System.out.println(t.getAlert());
+            tk = (Task) taskIT.next();
+            TaskDTO tdto = new TaskDTO
+                    (tk.getProject(),
+                     tk.getTitle(),
+                     tk.getDueDate(),
+                     tk.getCompletionDate(),
+                     tk.getStatus(),
+                     tk.getAlert()
+                    );
+            return tdto;
         }
+        return null;
     }
-    
+    public TaskDTO showPrevTask()
+    {
+        
+        Task tk;
+        if (taskIT.hasPrevious())
+        {
+            tk = (Task) taskIT.previous();
+            TaskDTO tdto = new TaskDTO
+                    (tk.getProject(),
+                     tk.getTitle(),
+                     tk.getDueDate(),
+                     tk.getCompletionDate(),
+                     tk.getStatus(),
+                     tk.getAlert()
+                    );
+            return tdto;
+        }
+        return null;
+    }
     public void readFromFile()
     {
         
@@ -79,5 +94,23 @@ public class TaskRepository {
             fh.writeFile(taskList);
         
     }
-            
+    public void editTask(int Tno, int attrib, String value)
+    {
+        Task tk = taskList.get(Tno);
+        if (tk != null)
+        {
+            switch(attrib)
+            {
+                case 1: tk.setProject(value);break;
+                case 2: tk.setTitle(value);break;
+                case 3: tk.setDueDate(value);
+                case 4: tk.setStatus(value);break;
+                
+            }
+        }
+    }
+    public void initializeIT()
+    {
+        taskIT = taskList.listIterator();
+    }
 }

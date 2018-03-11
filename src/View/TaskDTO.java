@@ -13,12 +13,12 @@ import java.util.Date;
  */
 public class TaskDTO {
 
-    public String project;
-    public String title;
-    public String date1;
-    public String date2;
-    public String status;
-    public String alert;
+    private String project;
+    private String title;
+    private String date1;
+    private String date2;
+    private String status;
+    private String alert;
     public TaskDTO(String project,String title, String date1, String date2,
             String status, String alert)
     {
@@ -29,4 +29,30 @@ public class TaskDTO {
         this.status = status;
         this.alert = alert;
     }
+    
+  public String getProjectDTO()
+  {
+      return project;
+  }
+  public String getTitleDTO()
+  {
+      return title;
+  }
+  public String getStatusDTO()
+  {
+      return status;
+  }
+  public String getAlertDTO()
+  {
+      return alert;
+  }
+  public String getDueDateDTO()
+  {
+      return date1.toString();
+  }
+  public String getCompletionDateDTO()
+  {
+      return date2.toString();
+  }
+
 }
