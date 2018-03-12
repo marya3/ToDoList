@@ -48,7 +48,6 @@ public class FileHandler {
            for (Task t: tl)
            {
                 os.writeObject(t);
-                System.out.println("writing to file");
            }
         }
         catch(Exception e)

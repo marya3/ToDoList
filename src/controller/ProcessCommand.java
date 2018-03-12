@@ -6,12 +6,10 @@
 package controller;
 
 import View.TaskDTO;
-import View.cmdLineInterface;
 import model.TaskRepository;
-import view.*;
+import java.util.ArrayList;
 public class ProcessCommand {
     TaskRepository trObj;
-    cmdLineInterface cliObj;
     
     public ProcessCommand()
     {
@@ -28,9 +26,6 @@ public class ProcessCommand {
             case 2: callCreateTask(tdto);break;
             case 3: System.out.println("user selected 3");break;
             case 4: quit();break;
-            case 5: System.out.println("user selected 5");break;
-            case 6: System.out.println("user selected 6");break;
-            case 7: System.out.println("user selected 7");break;
         }     
     }
 
@@ -39,9 +34,17 @@ public class ProcessCommand {
         trObj.addTask(tdto);
     }
 
-    public TaskDTO showTL()
+    public ArrayList<TaskDTO> showTL()
     {
-        return trObj.showNextTask();
+        trObj.initializeIT();
+        ArrayList<TaskDTO> tdtoList = new ArrayList<>();
+        TaskDTO objTDTO = trObj.showNextTask();
+        while (objTDTO != null)
+        {
+            tdtoList.add(objTDTO);
+            objTDTO = trObj.showNextTask();
+        }
+        return tdtoList;
     }
 
     public void quit()

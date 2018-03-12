@@ -4,19 +4,21 @@
  * and open the template in the editor.
  */
 package View;
-
-/**
- *
- * @author tmp-sda-1161
- */
-
 import controller.ProcessCommand;
-
+import java.util.ArrayList;
 import java.util.Scanner;
 public class cmdLineInterface {
-    Scanner scanner = new Scanner(System.in);
-    ProcessCommand pc = new ProcessCommand();
+    Scanner scanner;
+    ProcessCommand pc;
+    ArrayList<TaskDTO> taskDTOTaskList;
     int option;
+    
+    public cmdLineInterface()
+    {
+        scanner = new Scanner(System.in);
+        pc = new ProcessCommand();
+    }
+    
     public void showMainMenu()
     {
         System.out.println(">> Welcome to ToDoly ");
@@ -31,23 +33,65 @@ public class cmdLineInterface {
     public int getUserInput()
     {
         String userinput = scanner.next();
-        option = Integer.parseInt(userinput);
-        System.out.println(userinput);
-        
-        switch (option)
+        try
         {
-        case 1: showReportHeading();
-                showReport();break;
-                //pc.processCommand(option,null);;break;
-        case 2: System.out.println("user selected 2");showAddTaskMenu();break;
-        case 3: edit();break;
-        case 4: pc.processCommand(4, null);break;
-        case 5: System.out.println("user selected 5");break;
-        case 6: System.out.println("user selected 6");break;
-        case 7: System.out.println("user selected 7");break;
+            int choice = Integer.parseInt(userinput);
+            return choice;
         }
-        
-        return option;
+        catch (NumberFormatException e)
+        {
+            System.out.println("Please enter correct option");
+            return -1;
+        }
+    }
+    private boolean validateUserInput(int low,int high, int input)
+    {
+        if (input == -1)
+        {
+            return false;
+        }
+        if ((input <= high) && (input >= low))
+        {
+            return true;
+        }
+        else
+        {
+            System.out.println("Please enter correct option");
+            return false;
+        }
+    }
+    public void processUserInput()
+    {   
+        showMainMenu();
+        option = getUserInput();
+        boolean userDone = false;
+        //while (option != 4)
+        while(!userDone)
+        {
+            if (validateUserInput(1, 4, option))
+            {
+                switch (option)
+                {
+                    case 1: showReportHeading();
+                            showReport();break;
+                            //pc.processCommand(option,null);;break;
+                    case 2: showAddTaskMenu();break;
+                    case 3: edit();break;
+                    case 4:pc.processCommand(4, null); 
+                        userDone = true;break;
+                }
+                if (!userDone)
+                {
+                    showMainMenu();
+                    option = getUserInput();
+
+                }
+            }
+            else
+            {
+                option = getUserInput();
+            }
+        }
     }
     public void showAddTaskMenu()
     {
@@ -55,7 +99,7 @@ public class cmdLineInterface {
         System.out.println(">> You Picked option:2 to add a task ");
         System.out.println("Please enter following details ");
         
-        System.out.println("Project: ");
+        System.out.print("Project: ");
         String project = scanner.next(); 
         System.out.print("Title for the Task: ");
         String title = scanner.next();
@@ -73,15 +117,36 @@ public class cmdLineInterface {
         showReportHeading();
         showReport();
         System.out.print("Enter the number of task you want to edit: ");
-        String userinput = scanner.next();
-        int taskNo = Integer.parseInt(userinput);
+        
+        int taskNo = getUserInput();
+        boolean validChoice = false;
+        while(!validChoice)
+            if (validateUserInput(1, taskDTOTaskList.size(), taskNo))
+            {
+                validChoice = true;
+            }
+            else
+            {
+                taskNo = getUserInput();
+            
+            }
         System.out.println("1 To change Project");
         System.out.println("2 To change Title");
         System.out.println("3 To change Duedate");
         System.out.print("Enter you choice: ");
-        String whatToChange = scanner.next();
-        int editOption = Integer.parseInt(whatToChange);
         
+        int editOption = getUserInput();
+        validChoice = false;
+        while(!validChoice)
+            if (validateUserInput(1, 3, editOption))
+            {
+                validChoice = true;
+            }
+            else
+            {
+                editOption = getUserInput();
+            
+            }
         switch (editOption)
         {
             case 1: System.out.print("Enter project :");
@@ -100,6 +165,7 @@ public class cmdLineInterface {
     }
     public void showReportHeading()
     {
+        /*
         System.out.print("Project");
         System.out.print("         ");
         System.out.print("Title");
@@ -109,23 +175,28 @@ public class cmdLineInterface {
         System.out.print("Status");
         System.out.print("         ");
         System.out.println("Alert");
+        */
+        printRow("Project","Title","DueDate","Status","Alert");
+        printRow("-------","-----","-------","------","-----");
     }
-            
+    private void printRow(String c0, String c1, String c2, String c3, String c4)
+    {
+        System.out.printf("%-20s %-20s %-20s %-20s %-20s%n", c0, c1, c2,c3, c4);
+    }       
     public void showReport()
     {
-        TaskDTO tdto = pc.showTL();
-        while (tdto != null)
-        {
-            System.out.print(tdto.getProjectDTO());
-            System.out.print("         ");
-            System.out.print(tdto.getTitleDTO());
-            System.out.print("         ");
-            System.out.print(tdto.getDueDateDTO());
-            System.out.print("         ");
-            System.out.print(tdto.getStatusDTO());
-            System.out.print("         ");
-            System.out.println(tdto.getAlertDTO());
-            tdto = pc.showTL();
+        
+        
+        taskDTOTaskList = pc.showTL();
+        //TaskDTO tdto = pc.showTL();
+        for(TaskDTO tdto:taskDTOTaskList)
+        //while (tdto != null)
+        {   
+            printRow(tdto.getProjectDTO(),
+                tdto.getTitleDTO(),
+                tdto.getDueDateDTO(),
+                tdto.getStatusDTO(),
+                tdto.getAlertDTO());
         }
     }
 }
