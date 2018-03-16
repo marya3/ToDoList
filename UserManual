@@ -1,0 +1,20 @@
+
+
+User Manual
+-----------
+
+This application helps maintain a ToDo list.
+
+
+At the start the application gives the following options.
+
+1-Show list
+2-Add task
+3-Edit task
+4-Save and quit the application.
+
+Note :- user is allowed to input only displayed option.
+
+
+
+
