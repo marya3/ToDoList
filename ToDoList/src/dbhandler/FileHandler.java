@@ -12,25 +12,35 @@ package dbhandler;
 import java.util.ArrayList;
 import java.io.*;
 import model.Task;
+
 public class FileHandler {
     ObjectInputStream is;
     ObjectOutputStream os;
+    /**
+     * Constructor to create the Objectinput Stream to read object file.
+     */
     public FileHandler()
     {
        try
-        {is = new ObjectInputStream(new FileInputStream("Task.txt"));
+        {
+            is = new ObjectInputStream(new FileInputStream("Task.txt"));
         }
        catch(IOException e)
        {
-           System.out.println("cannot open file");
+           //System.out.println("cannot open file");
        }
     }  
+    
+    /**
+     * Module to loop over the records in the file.
+     * @return individual Task to the Model to create the array list
+     */
     public Task readFile()
     {
-       try {
-           Task tsk = (Task) is.readObject();
-           return tsk;
-            }
+       try{
+            Task tsk = (Task) is.readObject();
+            return tsk;
+          }
        catch(EOFException e)
        {
            return null;
@@ -41,6 +51,11 @@ public class FileHandler {
        }
           
     }
+    
+    /**
+     * module to write the file.
+     * @param Arraylist of tasks.
+     */
     public void writeFile(ArrayList<Task> tl)
     {
        try {
