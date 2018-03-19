@@ -10,7 +10,7 @@ package model;
  *
  * @author tmp-sda-1161
  */
-import View.TaskDTO;
+import view.TaskDTO;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -50,11 +50,11 @@ public class Task implements Serializable
   }
   public String getDueDate()
   {
-      return duedate.toString();
+      return duedate;
   }
   public String getCompletionDate()
   {
-      return completiondate.toString();
+      return completiondate;
   }
   public void setProject(String project)
   {
@@ -77,6 +77,9 @@ public class Task implements Serializable
   {
       this.completiondate=completionDate;
   }
-
+  public void setAlert(String alert)
+  {
+      this.alert = alert;
+  }
 }
 

@@ -3,10 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View;
-
-import java.util.Date;
-
+package view;
 /**
  *
  * @author tmp-sda-1161
@@ -19,6 +16,7 @@ public class TaskDTO {
     private String date2;
     private String status;
     private String alert;
+    
     public TaskDTO(String project,String title, String date1, String date2,
             String status, String alert)
     {
@@ -48,11 +46,11 @@ public class TaskDTO {
   }
   public String getDueDateDTO()
   {
-      return date1.toString();
+      return date1;
   }
   public String getCompletionDateDTO()
   {
-      return date2.toString();
+      return date2;
   }
 
 }

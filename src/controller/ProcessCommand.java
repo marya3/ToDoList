@@ -5,55 +5,55 @@
  */
 package controller;
 
-import View.TaskDTO;
+import view.TaskDTO;
 import model.TaskRepository;
 import java.util.ArrayList;
+
 public class ProcessCommand {
-    TaskRepository trObj;
+    TaskRepository taskRepositoryObj;
+    
     
     public ProcessCommand()
     {
-        trObj = new TaskRepository();
-        trObj.readFromFile();
-        trObj.initializeIT();
+        taskRepositoryObj = new TaskRepository();
+        taskRepositoryObj.readFromFile();
+        taskRepositoryObj.initializeIT();
     }
 
-    public void processCommand(int option, TaskDTO tdto)
+    /**
+     * calls creates task from model.
+     * @param tdto is the TaskDTO to receive the values entered by the user
+     */
+    public void createTask(TaskDTO tdto)
     {
-        switch (option)
-        { 
-            case 1: showTL();break;
-            case 2: callCreateTask(tdto);break;
-            case 3: System.out.println("user selected 3");break;
-            case 4: quit();break;
-        }     
+        taskRepositoryObj.addTask(tdto);
     }
 
-    public void callCreateTask(TaskDTO tdto)
+    /**
+     * Module to create arraylist of type TaskDTO from the arrayslist of tasks.
+     * @return Arraylist to view to show
+     */
+    public ArrayList<TaskDTO> getTaskList()
     {
-        trObj.addTask(tdto);
-    }
-
-    public ArrayList<TaskDTO> showTL()
-    {
-        trObj.initializeIT();
+        taskRepositoryObj.initializeIT();
         ArrayList<TaskDTO> tdtoList = new ArrayList<>();
-        TaskDTO objTDTO = trObj.showNextTask();
+        TaskDTO objTDTO = taskRepositoryObj.getNextTask();
         while (objTDTO != null)
         {
             tdtoList.add(objTDTO);
-            objTDTO = trObj.showNextTask();
+            objTDTO = taskRepositoryObj.getNextTask();
         }
         return tdtoList;
     }
 
-    public void quit()
-    {
-        trObj.writeToFile();
-    }
-
     public void edit(int tNo, int taskAttrib, String value)
     {
-        trObj.editTask(tNo-1,taskAttrib,value);
+        taskRepositoryObj.editTask(tNo-1,taskAttrib,value);
+    }
+    
+    
+    public void quit()
+    {
+        taskRepositoryObj.writeToFile();
     }
 }

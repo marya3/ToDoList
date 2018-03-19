@@ -9,24 +9,17 @@ package startup;
  *
  * @author tmp-sda-1161
  */
-import View.*;
+import view.*;
+import controller.*; 
 public class ToDoList {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        cmdLineInterface cmdlI = new cmdLineInterface();
-        //cmdlI.showMainMenu();
-        cmdlI.processUserInput();
-        
-//        int choice = cmdlI.getUserInput();
-//        while (choice != 4)
-//        {
-//            cmdlI.showMainMenu();
-//            choice = 
-//        }
+        ProcessCommand processCommand = new ProcessCommand();
+        CmdLineInterface cmdlI = new CmdLineInterface(processCommand);
+        cmdlI.startApplication();
         
     }
     
