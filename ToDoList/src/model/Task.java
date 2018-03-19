@@ -13,7 +13,7 @@ package model;
 import view.TaskDTO;
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.Comparator;
 public class Task implements Serializable
 {
   private String project;
@@ -77,6 +77,12 @@ public class Task implements Serializable
   {
       this.completiondate=completionDate;
   }
-
+  public void setAlert(String alert)
+  {
+      this.alert = alert;
+  }
+  
+ 
+          
 }
 

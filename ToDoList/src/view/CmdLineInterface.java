@@ -6,11 +6,17 @@
 package view;
 import controller.ProcessCommand;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Scanner;
 import java.time.format.*;
 import java.time.*;
 import java.util.Date;
 import java.text.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 public class CmdLineInterface {
     Scanner scanner;
@@ -22,6 +28,7 @@ public class CmdLineInterface {
     {
         scanner = new Scanner(System.in);
         pc = pCmd;
+        taskDTOTaskList = pc.getTaskList();
     }
     /**
      * main module in view which loops till the user wants to interact with the 
@@ -65,21 +72,24 @@ public class CmdLineInterface {
         System.out.print(">> ");
     }
     
-    
-    
-    
     public void showTaskToTheUser()
     {
         System.out.println("1 To Show entire List");
         System.out.println("2 To View one at a time");
+        System.out.println("3 To View sorted by Date");
+        System.out.println("4 To Filter by Project");
+        
+        
         System.out.print("Enter you choice: ");
-        option = getInputAndValidate(1, 2);
+        option = getInputAndValidate(1, 4);
         switch(option)
         {
             case 1: showReportHeading();
-                    showReport();
+                    showReport(taskDTOTaskList);
                     break;
-            case 2: System.out.println("Option 2");break;
+            case 2: showOneAtTime();break;
+            case 3: sortedByDate();break;
+            case 4: filterByProject();break;
         }
     }
     public void addTask()
@@ -142,7 +152,7 @@ public class CmdLineInterface {
     public void editTask()
     {
         showReportHeading();
-        showReport();
+        showReport(taskDTOTaskList);
         if (taskDTOTaskList.isEmpty())
         {
             System.out.println("Nothing to edit ");
@@ -153,61 +163,81 @@ public class CmdLineInterface {
             while(!userDone)
             {
                 System.out.print
-                    ("Enter the task Number you want to edit/remove: ");
-                int taskNo = getInputAndValidate(1,taskDTOTaskList.size());
+                ("Enter the task Number you want to edit/remove or 0 to exit: ");
+                int taskNo = getInputAndValidate(0, taskDTOTaskList.size());
 
 
-                System.out.println("0 To EXIT edit Menu");
-                System.out.println("1 To update Project");
-                System.out.println("2 To update Title");
-                System.out.println("3 To update Duedate");
-                System.out.println("4 To update Status");
-                System.out.println("5 to remove the task");
-                System.out.print("Enter you choice: ");
-                int editOption = getInputAndValidate(0, 5);
-                switch (editOption)
+                //System.out.println("0 To EXIT edit Menu");
+                if (taskNo == 0)
                 {
-                    case 0: userDone = true;break;
-                    case 1: System.out.print("Enter project :");
-                            String pr = scanner.next();
-                            pc.edit(taskNo, editOption,pr);break;
-                    case 2: System.out.print("Enter title :");
-                            String tt = scanner.next();
-                            pc.edit(taskNo, editOption,tt);break; 
-                    case 3: System.out.print("Enter DueDate :");
-                            String date = scanner.next();
-                            pc.edit(taskNo, editOption,date);break;
-                    case 4: System.out.print("Enter status :");
-                            String status = scanner.next();
-                            pc.edit(taskNo, editOption,status);break;
-                    case 5: System.out.print("Enter status :");
-                            pc.edit(taskNo, editOption,"delete");break;
+                    userDone = true;
                 }
-            }    
+                else
+                {
+                    System.out.println("1 To update Project");
+                    System.out.println("2 To update Title");
+                    System.out.println("3 To update Duedate");
+                    System.out.println("4 To update Status");
+                    System.out.println("5 to remove the task");
+                    System.out.print("Enter you choice: ");
+                    int editOption = getInputAndValidate(0, 5);
+                    switch (editOption)
+                    {
+                        //case 0: userDone = true;break;
+                        case 1: 
+                                System.out.print("Enter project :");
+                                String pr = scanner.next();
+                                pc.edit(taskNo, editOption,pr);break;
+                        case 2: System.out.print("Enter title :");
+                                String tt = scanner.next();
+                                pc.edit(taskNo, editOption,tt);break; 
+                        case 3: System.out.print("Enter DueDate :");
+                                String date = scanner.next();
+                                pc.edit(taskNo, editOption,date);break;
+                        case 4: System.out.print("Enter status :");
+                                String status = scanner.next();
+                                pc.edit(taskNo, editOption,status);break;
+                        case 5: System.out.print("Enter status :");
+                                pc.edit(taskNo, editOption,"delete");break;
+                    }
+                    showReportHeading();
+                    showReport(taskDTOTaskList);
+                }    
+            }
         }
     }
     public void showReportHeading()
     {
-        printRow("Project","Title","DueDate","Status","Alert");
-        printRow("-------","-----","-------","------","-----");
+        printRow("Task Number","Project","Title","DueDate","Status","Alert");
+        printRow("-----------","-------","-----","-------","------","-----");
     }
+    
     private void printRow(String c0, String c1, 
-                          String c2, String c3, String c4)
+                          String c2, String c3, String c4, String c5)
     {
-        System.out.printf("%-20s %-20s %-20s %-20s %-20s%n", 
-                          c0, c1, c2,c3, c4);
+        System.out.printf("%-15s %-15s %-15s %-15s %-15s %-15s%n", 
+                          c0, c1, c2,c3, c4, c5);
     }       
-    public void showReport()
+    
+    public void showReport(ArrayList<TaskDTO> taskDTOArrayList)
+    {
+        int i = 0;
+        
+        //loadTasks();
+        for(TaskDTO tdto:taskDTOArrayList)
+        {   
+            printRow(   Integer.toString(++i),
+                        tdto.getProjectDTO(),
+                        tdto.getTitleDTO(),
+                        tdto.getDueDateDTO(),
+                        tdto.getStatusDTO(),
+                        tdto.getAlertDTO());
+        }
+    }
+    
+    private void loadTasks()
     {
         taskDTOTaskList = pc.getTaskList();
-        for(TaskDTO tdto:taskDTOTaskList)
-        {   
-            printRow(tdto.getProjectDTO(),
-                tdto.getTitleDTO(),
-                tdto.getDueDateDTO(),
-                tdto.getStatusDTO(),
-                tdto.getAlertDTO());
-        }
     }
     private void exitTask()
     {
@@ -272,4 +302,135 @@ public class CmdLineInterface {
         }
     }
     
+    public void showOneAtTime()
+    {
+        taskDTOTaskList = pc.getTaskList();
+        ListIterator<TaskDTO> it = taskDTOTaskList.listIterator();
+        showReportHeading();
+        int i=0;
+        if (taskDTOTaskList.isEmpty())
+        {
+            System.out.print("List is empty");
+            
+        }
+        else
+        {
+            //it.next();
+            //populateItemFromList(taskDTOTaskList.get(0));
+        }
+        
+        boolean userDone = false;
+        boolean changeOfDirection = false;
+        int lowIndex = 0;
+        int highIndex = 2;
+        while (!userDone)
+        {
+            editShowExitmenu();
+            if (it.hasNext())
+            {
+                
+                if(it.hasPrevious())
+                {
+                    editShowNextMenu();
+                    editShowPrevMenu();
+                    option = getInputAndValidate(0,2);
+                }
+                else
+                {
+                    editShowNextMenu();
+                    option = getInputAndValidate(0,1);
+                }
+            }
+            else if(it.hasPrevious())
+            {
+                editShowPrevMenu();
+                option = getInputAndValidate(0,2);
+                while (option == 1)
+                {
+                    System.out.println("Please enter correct choice");
+                    option = getInputAndValidate(0,2);
+                    
+                }
+            }
+            
+            switch(option)
+            {
+                case 0: userDone = true;break;
+                case 1: showReportHeading();
+                        //TaskDTO obj = it.next();
+                        //if(!changeOfDirection){it.next();}
+                        populateItemFromList(it.next());
+                                ;break;
+                        
+//                        populateItemFromList(obj);break;
+                case 2: showReportHeading();
+                        //it.previous();
+                        populateItemFromList(it.previous());
+                        break;
+//                        TaskDTO obj1 = it.previous();
+//                        populateItemFromList(obj1);break;
+            }
+        }
+    }
+    public void editShowNextMenu()
+    {
+        System.out.println("Enter 1 to show Next");
+       
+    }
+    public void editShowPrevMenu()
+    {
+        System.out.println("Enter 2 to show Prev");
+       
+    }
+    public void editShowExitmenu()
+    {
+        System.out.println("Enter 0 to Exit");
+    }
+    public void populateItemFromList(TaskDTO tdto)
+    {
+        printRow(Integer.toString(1),
+                 tdto.getProjectDTO(),
+                 tdto.getTitleDTO(),
+                 tdto.getDueDateDTO(),
+                 tdto.getStatusDTO(),
+                 tdto.getAlertDTO());
+    }
+    
+    public static Comparator<TaskDTO> taskDateComparator = new Comparator<TaskDTO>()
+    {
+      public int compare(TaskDTO task1, TaskDTO task2) {
+      String dueDate1 = task1.getDueDateDTO();
+      String dueDate2 = task2.getDueDateDTO();
+      return dueDate1.compareTo(dueDate2);
+      }
+    };
+    
+    public void sortedByDate(){
+        
+        //taskDTOTaskList = pc.getTaskList();
+        Collections.sort(taskDTOTaskList,taskDateComparator);
+        System.out.println("Task List Sorted on Date");
+        showReportHeading();
+        showReport(taskDTOTaskList);
+    }
+    
+    public void filterByProject()
+    {
+        System.out.println("Enter the project: ");
+        String projectToView = scanner.next();
+        ArrayList<TaskDTO> taskDTOTaskListFiltered = new ArrayList<>();
+        
+        taskDTOTaskListFiltered = taskDTOTaskList.stream()
+        .filter(taskdto -> projectToView.equals(taskdto.getProjectDTO()))
+        .collect(Collectors.toCollection(ArrayList::new));
+        if (taskDTOTaskListFiltered.isEmpty())
+        {
+            System.out.println("Project not created yet");
+        }
+        else 
+        {
+            showReportHeading();
+            showReport(taskDTOTaskListFiltered);
+        }
+    }
 }
