@@ -77,6 +77,9 @@ public class Task implements Serializable
   {
       this.completiondate=completionDate;
   }
-
+  public void setAlert(String alert)
+  {
+      this.alert = alert;
+  }
 }
 
