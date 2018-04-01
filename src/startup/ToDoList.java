@@ -10,10 +10,13 @@ package startup;
  * @author tmp-sda-1161
  */
 import view.*;
-import controller.*; 
+
+import controller.ProcessCommand;
+
 public class ToDoList {
 
     /**
+     * main method to start the application.
      * @param args the command line arguments
      */
     public static void main(String[] args) {

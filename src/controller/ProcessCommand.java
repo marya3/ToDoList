@@ -6,6 +6,7 @@
 package controller;
 
 import view.TaskDTO;
+import view.CompletedTasksDTO;
 import model.TaskRepository;
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class ProcessCommand {
     {
         taskRepositoryObj = new TaskRepository();
         taskRepositoryObj.readFromFile();
+        //taskRepositoryObj.readCompletedTaskFile();
         taskRepositoryObj.initializeIT();
     }
 
@@ -30,8 +32,8 @@ public class ProcessCommand {
     }
 
     /**
-     * Module to create arraylist of type TaskDTO from the arrayslist of tasks.
-     * @return Arraylist to view to show
+     * Module to create ArrayList of type TaskDTO from the ArrayList of tasks.
+     * @returns ArrayList to view to show
      */
     public ArrayList<TaskDTO> getTaskList()
     {
@@ -46,14 +48,45 @@ public class ProcessCommand {
         return tdtoList;
     }
 
+    /**
+     * 
+     * @param tNo - taskNumber which is to be edited.
+     * @param taskAttrib - attribute to be changed like project, title, status
+     * @param value - new value of the attribute
+     */
     public void edit(int tNo, int taskAttrib, String value)
     {
         taskRepositoryObj.editTask(tNo-1,taskAttrib,value);
     }
     
-    
+    /**
+     * method calls methods to write to file. Invoked only at the time of
+     * quitting the application.
+     */
     public void quit()
     {
         taskRepositoryObj.writeToFile();
     }
+    
+     /**
+     * Module to create ArrayList of type CompletedTaskDTO from the ArrayList 
+     * of tasks completed tasks.
+     * @returns ArrayList to view to show
+     */
+    
+    public ArrayList<CompletedTasksDTO> getCompletedTaskList()
+    {
+        taskRepositoryObj.initializeIT();
+        ArrayList<CompletedTasksDTO> tdtoCompletedList = new ArrayList<>();
+        CompletedTasksDTO objCompletedTDTO = 
+                taskRepositoryObj.getNextCompletedTask();
+        while (objCompletedTDTO != null)
+        {
+            tdtoCompletedList.add(objCompletedTDTO);
+            objCompletedTDTO = 
+                taskRepositoryObj.getNextCompletedTask();
+        }
+        return tdtoCompletedList;
+    }
+    
 }
